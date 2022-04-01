@@ -1,5 +1,6 @@
 package ru.vsu.cs.kravtsova_n_e.task2;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class SimpleLinkedList<T> implements Iterable<T> {
@@ -50,7 +51,10 @@ public class SimpleLinkedList<T> implements Iterable<T> {
         }
     }
 
-    private ListNode getNode(int index){
+    private ListNode getNode(int index) throws SimpleLinkedListException{
+        if (index < 0 || index >= size){
+            throw new SimpleLinkedListException("Index is incorrect");
+        }
         ListNode curr = head;
         for (int i = 0; i < index; i++){
             curr = curr.next;
@@ -111,6 +115,45 @@ public class SimpleLinkedList<T> implements Iterable<T> {
 
     public int size(){
         return size;
+    }
+
+    private void swapElements(int index1, int index2) throws SimpleLinkedListException{
+        checkEmptyError();
+
+        ListNode node1 = getNode(index1);
+        ListNode node2 = getNode(index2);
+
+        node1.next = node2.next;
+        node2.next = node1;
+
+        if (index1 > 0) {
+            ListNode prev = getNode(index1 - 1);
+            prev.next = node2;
+        } else if (index1 == 0){
+            head = node2;
+        } else if (index2 == 0){
+            head = node1;
+        }
+
+        if (index2 == size - 1){
+            tail = node1;
+            tail.next = null;
+        } else if (index1 == size - 1){
+            tail = node2;
+            tail.next = null;
+        }
+    }
+
+    public void sort(Comparator<T> comparator) throws Exception {
+        checkEmptyError();
+        int size = this.size();
+        for (int i = 1; i < size - 1; i++) {
+            for (int j = size - 1; j >= i; j--) {
+                if (comparator.compare(this.get(j - 1), this.get(j)) > 0) {
+                    this.swapElements(j - 1, j);
+                }
+            }
+        }
     }
 
     @Override
