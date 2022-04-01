@@ -11,22 +11,23 @@ public class Main {
         list.addLast(53);
         list.addLast(33);
         list.addLast(0);
-
-        int i = 0;
-        for (Integer element : list){
-            System.out.print((i > 0 ? ", " : "") + element);
-            i++;
-        }
-        System.out.println();
+        
+        printLinkedList(list);
 
         list.sort((a, b) -> a - b);
+        printLinkedList(list);
 
-        i = 0;
-        for (Integer element : list){
-            System.out.print((i > 0 ? ", " : "") + element);
-            i++;
-        }
-        System.out.println();
+        list.sort((a, b) -> b - a);
+        printLinkedList(list);
+     }
+
+     private static <T> void printLinkedList(SimpleLinkedList<T> list){
+         int i = 0;
+         for (T element : list){
+             System.out.print((i > 0 ? ", " : "") + element);
+             i++;
+         }
+         System.out.println();
      }
 
 }

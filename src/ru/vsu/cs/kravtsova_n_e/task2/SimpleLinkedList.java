@@ -147,8 +147,8 @@ public class SimpleLinkedList<T> implements Iterable<T> {
     public void sort(Comparator<T> comparator) throws Exception {
         checkEmptyError();
         int size = this.size();
-        for (int i = 1; i < size - 1; i++) {
-            for (int j = size - 1; j >= i; j--) {
+        for (int i = 0; i < size - 1; i++) {
+            for (int j = size - 1; j > i; j--) {
                 if (comparator.compare(this.get(j - 1), this.get(j)) > 0) {
                     this.swapElements(j - 1, j);
                 }
