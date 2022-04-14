@@ -117,42 +117,48 @@ public class SimpleLinkedList<T> implements Iterable<T> {
         return size;
     }
 
-    private void swapElements(int index1, int index2) throws SimpleLinkedListException{
-        checkEmptyError();
-
-        ListNode node1 = getNode(index1);
-        ListNode node2 = getNode(index2);
-
-        node1.next = node2.next;
-        node2.next = node1;
-
-        if (index1 > 0) {
-            ListNode prev = getNode(index1 - 1);
-            prev.next = node2;
-        } else if (index1 == 0){
-            head = node2;
-        } else if (index2 == 0){
-            head = node1;
-        }
-
-        if (index2 == size - 1){
-            tail = node1;
-            tail.next = null;
-        } else if (index1 == size - 1){
-            tail = node2;
-            tail.next = null;
-        }
-    }
-
     public void sort(Comparator<T> comparator) throws Exception {
         checkEmptyError();
+
         int size = this.size();
+        ListNode prevSortedNode = null;
+
         for (int i = 0; i < size - 1; i++) {
-            for (int j = size - 1; j > i; j--) {
-                if (comparator.compare(this.get(j - 1), this.get(j)) > 0) {
-                    this.swapElements(j - 1, j);
+            ListNode cur = head;
+            for (int j = 1; j < size - 1; j++) {
+                if (cur == prevSortedNode){
+                    break;
                 }
+                if (comparator.compare(cur.next.value, cur.next.next.value) > 0) {
+                    ListNode tmp = new ListNode(cur.next.value, cur.next.next.next);
+                    cur.next = cur.next.next;
+                    cur.next.next = tmp;
+                }
+                cur = cur.next;
             }
+            prevSortedNode = cur;
+        }
+
+        ListNode cur = head;
+        head = new ListNode(cur.next.value, cur);
+        head.next.next = cur.next.next;
+        cur = head;
+
+        for (int i = 1; i < size - 1; i++) {
+            if (comparator.compare(cur.next.value, cur.next.next.value) > 0) {
+                ListNode tmp = new ListNode(cur.next.value, cur.next.next.next);
+                cur.next = cur.next.next;
+                cur.next.next = tmp;
+            }
+            cur = cur.next;
+        }
+
+        cur = head;
+        for (int i = 0; i < size - 1; i++) {
+            if (i == size - 1){
+                tail = cur;
+            }
+            cur = cur.next;
         }
     }
 
