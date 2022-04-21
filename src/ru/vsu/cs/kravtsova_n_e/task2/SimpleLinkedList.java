@@ -125,40 +125,34 @@ public class SimpleLinkedList<T> implements Iterable<T> {
 
         for (int i = 0; i < size - 1; i++) {
             ListNode cur = head;
-            for (int j = 1; j < size - 1; j++) {
-                if (cur == prevSortedNode){
-                    break;
-                }
+            for (int j = 1; j < size - 1 - i; j++) {
                 if (comparator.compare(cur.next.value, cur.next.next.value) > 0) {
-                    ListNode tmp = new ListNode(cur.next.value, cur.next.next.next);
+                    tail.next = cur.next;
                     cur.next = cur.next.next;
-                    cur.next.next = tmp;
+                    tail.next.next = null;
+                    tail = tail.next;
                 }
                 cur = cur.next;
             }
-            prevSortedNode = cur;
         }
 
-        ListNode cur = head;
-        head = new ListNode(cur.next.value, cur);
-        head.next.next = cur.next.next;
-        cur = head;
-
-        for (int i = 1; i < size - 1; i++) {
-            if (comparator.compare(cur.next.value, cur.next.next.value) > 0) {
-                ListNode tmp = new ListNode(cur.next.value, cur.next.next.next);
-                cur.next = cur.next.next;
-                cur.next.next = tmp;
+        if (comparator.compare(head.value, head.next.value) > 0) {
+            tail.next = head;
+            head = head.next;
+            tail.next.next = null;
+            tail = tail.next;
+            for (int i = 0; i < size - 1; i++) {
+                ListNode cur = head;
+                for (int j = 1; j < size - 1; j++) {
+                    if (comparator.compare(cur.next.value, cur.next.next.value) > 0) {
+                        tail.next = cur.next;
+                        cur.next = cur.next.next;
+                        tail.next.next = null;
+                        tail = tail.next;
+                    }
+                    cur = cur.next;
+                }
             }
-            cur = cur.next;
-        }
-
-        cur = head;
-        for (int i = 0; i < size - 1; i++) {
-            if (i == size - 1){
-                tail = cur;
-            }
-            cur = cur.next;
         }
     }
 
